@@ -72,12 +72,15 @@ n = 1000
 
 operation = input("Enter the operation you want to perform: \n\t1. Implicit Smoothing \n\t2. Mesh Cloning\n\t3. Mesh Deforming\n\t4. Pose Transfer\n\t5. Mesh Segmentation\n\t6. Reconstruction\n: ")
 
-# # lets transform all the meshes to have mean 0 and variance 1
+# # lets transform all the meshes to have mean 0
 # mesh_names = ["bunny", "armadillo", "homer"]
 # for mesh_name in mesh_names:
 #     mesh = trimesh.load(f"meshes/{mesh_name}.obj")
 #     mesh.vertices -= np.mean(mesh.vertices, axis=0)
-#     mesh.vertices /= np.std(mesh.vertices, axis=0)
+#     if mesh_name == "armadillo":
+#         # rotate by 180 degrees around y axis
+#         R = np.array([[np.cos(np.pi), 0, np.sin(np.pi)], [0, 1, 0], [-np.sin(np.pi), 0, np.cos(np.pi)]])
+#         mesh.vertices = mesh.vertices @ R
 #     mesh.export(f"meshes/{mesh_name}.obj")
     
 if operation == '1':
@@ -140,10 +143,6 @@ elif operation == '2':
     mesh_1 = trimeshToO3D(mesh_1)
     visualize(mesh_1)
 
-    
-
-
-
 elif operation == '3':
     print("You chose mesh deforming")
     pass
@@ -159,8 +158,11 @@ elif operation == '4':
     _, _, basis1 = load_eigen_and_basis(mesh_1_name,  n, load)
     _, _, basis2 = load_eigen_and_basis(mesh_2_name,  n, load)
 
-    alpha = project_onto_basis(mesh_1.vertices, basis1) # source
-    beta = project_onto_basis(mesh_2.vertices, basis2) # target
+    # ensure the vertices have std of 1 
+    vertices1 = mesh_1.vertices/np.std(mesh_1.vertices)
+    vertices2 = mesh_2.vertices/np.std(mesh_2.vertices)
+    alpha = project_onto_basis(vertices1, basis1) # source
+    beta = project_onto_basis(vertices2, basis2) # target
 
     k = 3
     # reconstruct the mesh (after pose transfer from mesh_1 to mesh_2) using mesh_1's low frequency and mesh_2's high frequency basis functions
