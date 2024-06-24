@@ -1,0 +1,6 @@
+*__pycache__
+*.png
+*.obj
+*.npy
+*.json
+.DS_Store

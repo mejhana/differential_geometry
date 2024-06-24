@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "poissonmesh"
+version = "0.1.0"
+description = "Implementation of poisson editing on meshes"
+authors = ["Meghana"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.10.10"
+open3d = "^0.18.0"
+trimesh = "^4.4.1"
+scipy = "^1.13.1"
+scikit-learn = "^1.5.0"
+pyyaml = "^6.0.1"
+addict = "^2.4.0"
+pillow = "^10.3.0"
+pandas = "^2.2.2"
+tqdm = "^4.66.4"
+matplotlib = "^3.9.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
